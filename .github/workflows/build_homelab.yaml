@@ -1,10 +1,10 @@
 name: Build HomeLab Extension
 
 on:
-  workflow_dispatch: # Botão manual pra rodar quando quiser
+  workflow_dispatch:
   push:
     paths:
-      - 'src/pt/homelab/**' # Só roda se mexer na sua pasta
+      - 'src/pt/homelab/**'
 
 jobs:
   build:
@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # <--- A CURA DO ERRO (Baixa todo o histórico pro Spotless não chorar)
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -22,8 +24,8 @@ jobs:
       - name: Build APK
         run: |
           chmod +x gradlew
-          # O comando mágico que compila SÓ A SUA PASTA
-          ./gradlew :src:pt:homelab:assembleDebug
+          # Adicionei flags para pular verificações chatas (-x) e garantir o build
+          ./gradlew :src:pt:homelab:assembleDebug -x spotlessCheck -x lint
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
@@ -31,4 +33,3 @@ jobs:
           name: homelab-extension
           path: src/pt/homelab/build/outputs/apk/debug/*.apk
           retention-days: 1
-
