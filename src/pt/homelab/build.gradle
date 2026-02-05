@@ -1,9 +1,8 @@
 ext {
     extName = 'HomeLab (Termux)'
-    pkgNameSuffix = 'pt.homelab'
     extClass = '.HomeLab'
     extVersionCode = 1
-    libVersion = '1.4'
+    isNsfw = true  // Opcional: marca como +18 pra evitar filtros de "Family Friendly"
 }
 
 apply from: "$rootDir/common.gradle"
